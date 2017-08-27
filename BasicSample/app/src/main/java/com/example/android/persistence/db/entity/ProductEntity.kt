@@ -14,20 +14,27 @@
  * limitations under the License.
  */
 
-package com.example.android.persistence.db.converter;
+package com.example.android.persistence.db.entity
 
-import android.arch.persistence.room.TypeConverter;
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 
-import java.util.Date;
+import com.example.android.persistence.model.Product
 
-public class DateConverter {
-    @TypeConverter
-    public static Date toDate(Long timestamp) {
-        return timestamp == null ? null : new Date(timestamp);
-    }
+@Entity(tableName = "products")
+class ProductEntity : Product {
+    @PrimaryKey
+    override var id: Int = 0
+    lateinit override var name: String
+    lateinit override var description: String
+    override var price: Int = 0
 
-    @TypeConverter
-    public static Long toTimestamp(Date date) {
-        return date == null ? null : date.getTime();
+    constructor()
+
+    constructor(product: Product) {
+        this.id = product.id
+        this.name = product.name
+        this.description = product.description
+        this.price = product.price
     }
 }

@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package com.example.android.persistence.model;
+package com.example.android.persistence.ui
 
-import java.util.Date;
+import android.databinding.BindingAdapter
+import android.view.View
 
-public interface Comment {
-    int getId();
-    int getProductId();
-    String getText();
-    Date getPostedAt();
+
+object BindingAdapters {
+    @BindingAdapter("visibleGone")
+    fun showHide(view: View, show: Boolean) {
+        view.visibility = if (show) View.VISIBLE else View.GONE
+    }
 }

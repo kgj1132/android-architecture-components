@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 
-package com.example.android.persistence.model;
+package com.example.android.persistence.db.converter
 
-public interface Product {
-    int getId();
-    String getName();
-    String getDescription();
-    int getPrice();
+import android.arch.persistence.room.TypeConverter
+import java.util.*
+
+object DateConverter {
+    @TypeConverter
+    fun toDate(timestamp: Long?): Date? = if (timestamp == null) null else Date(timestamp)
+
+    @TypeConverter
+    fun toTimestamp(date: Date?): Long? = date?.time
 }
