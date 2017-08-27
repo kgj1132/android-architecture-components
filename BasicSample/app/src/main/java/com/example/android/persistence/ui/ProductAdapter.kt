@@ -27,19 +27,19 @@ import com.example.android.persistence.model.Product
 
 class ProductAdapter(private val mProductClickCallback: ProductClickCallback?) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
-    internal var mProductList: List<Product>? = null
+    internal lateinit var mProductList: List<Product>
 
     fun setProductList(productList: List<Product>) {
-        if (mProductList == null) {
+        if (mProductList.isEmpty()) {
             mProductList = productList
             notifyItemRangeInserted(0, productList.size)
         } else {
             val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-                override fun getOldListSize(): Int= mProductList!!.size
+                override fun getOldListSize(): Int= mProductList.size
 
                 override fun getNewListSize(): Int = productList.size
 
-                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = mProductList!![oldItemPosition].id == productList[newItemPosition].id
+                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = mProductList[oldItemPosition].id == productList[newItemPosition].id
 
                 override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
                     val product = productList[newItemPosition]
@@ -64,11 +64,11 @@ class ProductAdapter(private val mProductClickCallback: ProductClickCallback?) :
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        holder.binding.product = mProductList!![position]
+        holder.binding.product = mProductList[position]
         holder.binding.executePendingBindings()
     }
 
-    override fun getItemCount(): Int = if (mProductList == null) 0 else mProductList!!.size
+    override fun getItemCount(): Int = mProductList.size
 
     class ProductViewHolder(val binding: ProductItemBinding) : RecyclerView.ViewHolder(binding.root)
 }

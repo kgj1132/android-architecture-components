@@ -34,7 +34,6 @@ internal object DatabaseInitUtil {
         val comments = ArrayList<CommentEntity>()
 
         generateData(products, comments)
-
         insertData(db, products, comments)
     }
 

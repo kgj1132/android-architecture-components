@@ -27,27 +27,27 @@ import com.example.android.persistence.model.Comment
 
 class CommentAdapter(private val mCommentClickCallback: CommentClickCallback?) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
-    private var mCommentList: List<Comment>? = null
+    private lateinit var mCommentList: List<Comment>
 
     fun setCommentList(comments: List<Comment>) {
-        if (mCommentList == null) {
+        if (mCommentList.isEmpty()) {
             mCommentList = comments
             notifyItemRangeInserted(0, comments.size)
         } else {
             val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-                override fun getOldListSize(): Int = mCommentList!!.size
+                override fun getOldListSize(): Int = mCommentList.size
 
 
                 override fun getNewListSize(): Int  = comments.size
 
                 override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                    val old = mCommentList!![oldItemPosition]
+                    val old = mCommentList[oldItemPosition]
                     val comment = comments[newItemPosition]
                     return old.id == comment.id
                 }
 
                 override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                    val old = mCommentList!![oldItemPosition]
+                    val old = mCommentList[oldItemPosition]
                     val comment = comments[newItemPosition]
                     return old.id == comment.id
                             && old.postedAt === comment.postedAt
@@ -69,11 +69,11 @@ class CommentAdapter(private val mCommentClickCallback: CommentClickCallback?) :
     }
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
-        holder.binding.comment = mCommentList!![position]
+        holder.binding.comment = mCommentList[position]
         holder.binding.executePendingBindings()
     }
 
-    override fun getItemCount(): Int = if (mCommentList == null) 0 else mCommentList!!.size
+    override fun getItemCount(): Int = mCommentList.size
 
     class CommentViewHolder(val binding: CommentItemBinding) : RecyclerView.ViewHolder(binding.root)
 }

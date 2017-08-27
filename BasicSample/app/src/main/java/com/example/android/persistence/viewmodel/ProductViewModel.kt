@@ -43,7 +43,7 @@ class ProductViewModel(application: Application,
 
         comments = switchMap(databaseCreator.isDatabaseCreated) { isDbCreated ->
             if (!isDbCreated) {
-                MutableLiveData()
+                ABSENT as MutableLiveData<List<CommentEntity>>
             } else {
                 databaseCreator.database!!.commentDao().loadComments(mProductId)
             }
@@ -51,7 +51,7 @@ class ProductViewModel(application: Application,
 
         observableProduct = switchMap(databaseCreator.isDatabaseCreated) { isDbCreated ->
             if (!isDbCreated) {
-                MutableLiveData()
+                ABSENT as MutableLiveData<ProductEntity>
             } else {
                 databaseCreator.database!!.productDao().loadProduct(mProductId)
             }
@@ -75,5 +75,9 @@ class ProductViewModel(application: Application,
     class Factory(private val mApplication: Application, private val mProductId: Int) : ViewModelProvider.NewInstanceFactory() {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T = ProductViewModel(mApplication, mProductId) as T
+    }
+    companion object {
+
+        private val ABSENT = MutableLiveData<Any>()
     }
 }

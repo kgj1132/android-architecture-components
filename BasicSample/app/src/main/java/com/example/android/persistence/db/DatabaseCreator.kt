@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class DatabaseCreator private constructor(){
 
     private val mIsDatabaseCreated = MutableLiveData<Boolean>()
+    private var sInstance: DatabaseCreator= DatabaseCreator()
 
     var database: AppDatabase? = null
         private set
@@ -83,7 +84,7 @@ class DatabaseCreator private constructor(){
 
             override fun onPostExecute(ignored: Void) {
                 // Now on the main thread, notify observers that the db is created and ready.
-                mIsDatabaseCreated.setValue(true)
+                mIsDatabaseCreated.value = true
             }
         }.execute(context.applicationContext)
     }
@@ -97,17 +98,7 @@ class DatabaseCreator private constructor(){
     }
 
     companion object {
-
-        private var sInstance: DatabaseCreator= DatabaseCreator()
-
-        private val LOCK = Any()
-
-        @Synchronized
-        fun getInstance(): DatabaseCreator {
-                synchronized(LOCK) {
-                        sInstance = DatabaseCreator()
-                    }
-            return sInstance
-        }
+        private val sInstance by lazy{ DatabaseCreator()}
+        fun getInstance() = sInstance
     }
 }
